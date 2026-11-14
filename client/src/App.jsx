@@ -5,6 +5,8 @@ import LoginPage from './pages/LoginPage';
 import MenuPage from './pages/MenuPage';
 import AdminMenuPage from './pages/AdminMenuPage';
 import StaffDashboardPage from './pages/StaffDashboardPage';
+import CartPage from './pages/CartPage';
+import { CartProvider } from './context/CartContext';
 
 function RootRedirect() {
   const { user, loading } = useAuth();
@@ -22,35 +24,45 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<RootRedirect />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/menu"
-            element={
-              <ProtectedRoute allowedRoles={['student', 'staff', 'admin']}>
-                <MenuPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/staff"
-            element={
-              <ProtectedRoute allowedRoles={['staff']}>
-                <StaffDashboardPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/menu"
-            element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <AdminMenuPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<RootRedirect />} />
-        </Routes>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<RootRedirect />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/menu"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'staff', 'admin']}>
+                  <MenuPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <CartPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff"
+              element={
+                <ProtectedRoute allowedRoles={['staff']}>
+                  <StaffDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/menu"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminMenuPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<RootRedirect />} />
+          </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );

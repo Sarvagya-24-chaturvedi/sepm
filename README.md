@@ -92,5 +92,60 @@ npm run dev
 
 Open `http://localhost:5173` in your browser. The Vite dev server proxies `/api` requests to `http://localhost:5000`.
 
+## Increment 2: Cart and Order Placement
+
+Students can add available menu items to a persistent browser cart, adjust quantities,
+and place an order through `POST /api/orders`. Prices are always read again from
+MongoDB before checkout; the client-supplied prices and total are never accepted.
+Order creation stores an `Order` and its snapshot `OrderItem` documents in one
+MongoDB transaction. The cart is cleared only after the API confirms success.
+
+### Order data model
+
+- `Order`: `orderNumber` (unique), `studentId` (reference to `User`), `totalAmount`,
+  `status`, timestamps, and an optional unique `idempotencyKey`.
+- `OrderItem`: `orderId`, `menuItemId`, `itemName`, `unitPrice`, `quantity`, and
+  `subtotal`. Name and price are snapshots so later menu edits do not change history.
+- Status values are `Placed`, `Confirmed`, `Preparing`, `Ready`, and `Completed`;
+  Increment 2 creates orders with `Placed`. The latter values are reserved for the
+  staff/status increment.
+
+### Order API
+
+All order routes use the existing cookie JWT. Students can access only their own
+orders; staff and admins can use the future-compatible listing route.
+
+- `POST /api/orders` (student): body
+  `{ "items": [{ "menuItemId": "<menu id>", "quantity": 2 }] }`.
+  An optional `Idempotency-Key` header makes retries safe.
+- `GET /api/orders/my` (student): returns the authenticated student's orders.
+- `GET /api/orders/:orderId` (student): returns one of that student's orders.
+- `GET /api/orders` (staff/admin): returns up to 100 orders for the future staff
+  dashboard.
+
+Successful placement returns `{ success, message, data }`, where `data` contains
+`order_id`, `status`, `total_amount`, `items`, and `created_at`.
+
+### Running Increment 2
+
+The existing setup commands remain unchanged:
+
+```bash
+cd server
+npm test
+npm run dev
+```
+
+In another terminal:
+
+```bash
+cd client
+npm run build
+npm run dev
+```
+
+MongoDB Atlas (or another MongoDB deployment configured as a replica set) is
+required for the transaction used by order placement.
+
 ### Logging In (Increment 1)
 Since Increment 1 does not include user registration/signup, use the seeded demo accounts defined in `server/src/seed.js` (and printed to the console when you run `npm run seed`) to log in as an `admin`, `staff`, or `student` user.
