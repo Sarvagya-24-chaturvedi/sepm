@@ -1,5 +1,7 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
+const dns = require('node:dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const User = require('./models/User');

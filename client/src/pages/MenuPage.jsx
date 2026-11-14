@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../api/axios';
 import Layout from '../components/Layout';
 import ErrorRetry from '../components/ErrorRetry';
+import { useCart } from '../context/CartContext';
 
 export default function MenuPage() {
   const [items, setItems] = useState([]);
@@ -9,6 +10,7 @@ export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { addItem, items: cartItems } = useCart();
 
   const fetchMenu = useCallback(async (category) => {
     setLoading(true);
@@ -120,9 +122,22 @@ export default function MenuPage() {
                   )}
                 </div>
 
-                <p className="mt-4 text-lg font-bold text-slate-900">
-                  &#8377;{Number(item.price).toFixed(0)}
-                </p>
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <p className="text-lg font-bold text-slate-900">
+                    &#8377;{Number(item.price).toFixed(2)}
+                  </p>
+                  {item.isAvailable && (
+                    <button
+                      type="button"
+                      onClick={() => addItem(item)}
+                      className="rounded-lg bg-amber-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    >
+                      {cartItems.find((cartItem) => cartItem.menuItemId === item._id)
+                        ? 'Add another'
+                        : 'Add to cart'}
+                    </button>
+                  )}
+                </div>
               </article>
             ))}
           </div>

@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth, getHomePathForRole } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const ROLE_LINKS = {
   student: [{ to: '/menu', label: 'Menu' }],
@@ -16,13 +17,16 @@ const ROLE_LINKS = {
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { itemCount } = useCart();
 
   const handleLogout = async () => {
     await logout();
     navigate('/login', { replace: true });
   };
 
-  const links = user ? ROLE_LINKS[user.role] || [] : [];
+  const links = user
+    ? [...(ROLE_LINKS[user.role] || []), ...(user.role === 'student' ? [{ to: '/cart', label: `Cart${itemCount ? ` (${itemCount})` : ''}` }] : [])]
+    : [];
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
