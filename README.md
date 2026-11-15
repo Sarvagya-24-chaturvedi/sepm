@@ -184,7 +184,10 @@ A student calling them receives `403`.
   Moves the order to its next status. The update is applied only if the order is
   still in the status the server just read, so two staff members cannot advance
   the same order twice.
-
+The staff dashboard retrieves the student's name and associated order items
+along with each order. Active orders are sorted by creation time in ascending
+order so staff can process older orders first. Completed orders are sorted by
+their latest update time. The API returns a maximum of 100 orders per request.
 Responses use `{ success, message?, data }`, where each order in `data` contains
 `id`, `orderNumber`, `status`, `nextStatus`, `totalAmount`, `createdAt`,
 `updatedAt`, `student`, and `items`.
@@ -200,16 +203,14 @@ Responses use `{ success, message?, data }`, where each order in `data` contains
 
 ### Frontend
 
-- **My Orders (`/orders`, student)** — lists the student's orders with items, total,
-  a status badge, and a five-step progress bar. It refreshes every 15 seconds and shows
-  a pickup message when an order is `Ready`. A "My Orders" link was added to the
-  student navbar.
-- **Staff Dashboard (`/staff`, staff)** — a table of orders with filter tabs
-  (Active and each status) and a "Mark <next status>" button on every row. It refreshes
-  every 10 seconds and shows success and error messages. It replaces the Increment 1
-  placeholder; `StaffDashboardPage.jsx` is no longer used.
-- **`StatusBadge`** — a small shared component that shows the coloured status label.
-
+- **My Orders (`/orders`, student)** — retrieves the authenticated student's order history using `GET /api/orders/my`. Displays order number, date, food items, quantities, total amount, current status badge and a five-stage progress bar.
+- **Order Status Updates** — automatically refreshes student order information every 15 seconds so changes made by staff become visible without manually reloading the page. Displays a pickup notification when an order reaches `Ready`.
+- **Staff Dashboard (`/staff`, staff)** — displays incoming orders in a table containing order number, student name, ordered items, quantities, total amount, creation time and current status.
+- **Order Filtering** — provides filter tabs for Active, Placed, Confirmed, Preparing, Ready and Completed orders.
+- **Status Management** — provides a `Mark <next status>` button for each order, allowing staff to advance orders through the permitted status sequence. Displays success and error messages after updates.
+- **Automatic Dashboard Refresh** — refreshes the staff order list every 10 seconds and provides a manual refresh option.
+- **`StatusBadge`** — reusable component for displaying the current order status.
+- **`StaffDashboard.jsx`** replaces the earlier Increment 1 staff dashboard placeholder. `StaffDashboardPage.jsx` remains in the repository but is no longer used by the application router.
 ### Running Increment 3
 
 The setup commands are unchanged. To try the new features, run `npm run seed`, then:
@@ -220,9 +221,25 @@ The setup commands are unchanged. To try the new features, run `npm run seed`, t
    order through each status.
 4. Check that the student's page updates within about 15 seconds.
 
-Unit tests for the transition rules are in `server/tests/orderStatus.test.js`
-and run with `npm test` in `server/`.
+### Testing
 
+Unit tests for the order status transition rules are available in
+`server/tests/orderStatus.test.js`.
+
+The tests cover:
+
+- Valid forward status transitions.
+- Rejection of backward transitions.
+- Rejection of skipped status stages.
+- Rejection of repeated status values.
+- Completed as the final order status.
+- Handling of unknown status values.
+
+Run the tests from the server directory:
+
+```bash
+cd server
+npm test
 ### Known limitations
 
 - `/staff` is open to the staff role only, while the staff API also accepts admins.
