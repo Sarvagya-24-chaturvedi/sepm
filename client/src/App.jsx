@@ -4,7 +4,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import MenuPage from './pages/MenuPage';
 import AdminMenuPage from './pages/AdminMenuPage';
-import StaffDashboardPage from './pages/StaffDashboardPage';
+import StaffDashboard from './pages/StaffDashboard'; // Increment 3 (replaces StaffDashboardPage)
+import MyOrders from './pages/MyOrders'; // Increment 3
 import CartPage from './pages/CartPage';
 import { CartProvider } from './context/CartContext';
 
@@ -45,10 +46,18 @@ export default function App() {
               }
             />
             <Route
+              path="/orders"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <MyOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/staff"
               element={
                 <ProtectedRoute allowedRoles={['staff']}>
-                  <StaffDashboardPage />
+                  <StaffDashboard />
                 </ProtectedRoute>
               }
             />
