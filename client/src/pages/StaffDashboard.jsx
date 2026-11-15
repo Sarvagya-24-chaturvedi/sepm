@@ -1,6 +1,7 @@
-// UI-05 Staff Dashboard. Route: /staff  (staff and admin). Replaces the Increment 1 placeholder.
+// UI-05 Staff Dashboard. Route: /staff  (staff). Replaces the Increment 1 placeholder (StaffDashboardPage).
 import { useCallback, useEffect, useState } from 'react';
 import api from '../api/axios';
+import Layout from '../components/Layout';
 import StatusBadge from '../components/StatusBadge';
 import { STATUS_FLOW, formatDateTime } from '../utils/orderStatus';
 
@@ -55,7 +56,8 @@ export default function StaffDashboard() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl p-4 sm:p-6">
+    <Layout>
+    <div>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Staff Dashboard</h1>
         <button onClick={() => load(true)} className="rounded border px-3 py-1 text-sm hover:bg-gray-50">
@@ -146,5 +148,6 @@ export default function StaffDashboard() {
         </div>
       )}
     </div>
+    </Layout>
   );
 }
