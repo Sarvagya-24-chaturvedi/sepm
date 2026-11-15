@@ -3,7 +3,10 @@ import { useAuth, getHomePathForRole } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
 const ROLE_LINKS = {
-  student: [{ to: '/menu', label: 'Menu' }],
+  student: [
+    { to: '/menu', label: 'Menu' },
+    { to: '/orders', label: 'My Orders' },
+  ],,
   staff: [
     { to: '/staff', label: 'Staff Dashboard' },
     { to: '/menu', label: 'Menu' },
