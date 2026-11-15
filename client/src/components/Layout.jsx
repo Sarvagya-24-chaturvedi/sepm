@@ -6,13 +6,15 @@ const ROLE_LINKS = {
   student: [
     { to: '/menu', label: 'Menu' },
     { to: '/orders', label: 'My Orders' },
-  ],,
+  ],
   staff: [
     { to: '/staff', label: 'Staff Dashboard' },
+    { to: '/records', label: 'Records' },
     { to: '/menu', label: 'Menu' },
   ],
   admin: [
     { to: '/admin/menu', label: 'Admin Menu' },
+    { to: '/records', label: 'Records' },
     { to: '/menu', label: 'Menu View' },
   ],
 };
@@ -49,10 +51,9 @@ export default function Layout({ children }) {
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) =>
-                    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-amber-100 text-amber-900'
-                        : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${isActive
+                      ? 'bg-amber-100 text-amber-900'
+                      : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                     }`
                   }
                 >
@@ -93,10 +94,9 @@ export default function Layout({ children }) {
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  `px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap ${
-                    isActive
-                      ? 'bg-amber-100 text-amber-900'
-                      : 'text-slate-700 hover:bg-slate-100'
+                  `px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap ${isActive
+                    ? 'bg-amber-100 text-amber-900'
+                    : 'text-slate-700 hover:bg-slate-100'
                   }`
                 }
               >
