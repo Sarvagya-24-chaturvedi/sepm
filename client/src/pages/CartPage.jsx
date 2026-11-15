@@ -36,7 +36,9 @@ export default function CartPage() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          'Unable to place your order. Your cart has been kept so you can retry.'
+          (err.message === 'Network Error'
+            ? 'Network error. Please check your connection and retry. Your cart has been kept.'
+            : 'Unable to place your order. Your cart has been kept so you can retry.')
       );
     } finally {
       setPlacing(false);
@@ -82,7 +84,22 @@ export default function CartPage() {
           <h1 className="text-2xl font-bold text-slate-900">Your Cart</h1>
           <p className="mt-1 text-sm text-slate-600">Review your items before placing the order.</p>
         </div>
-        {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        {error && (
+          <div
+            role="alert"
+            className="flex flex-col gap-2 rounded-lg border border-red-200 bg-red-50 p-3.5 text-sm text-red-700 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <span>{error}</span>
+            <button
+              type="button"
+              disabled={placing}
+              onClick={placeOrder}
+              className="inline-flex items-center justify-center rounded-md bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-50 shrink-0"
+            >
+              {placing ? 'Retrying...' : 'Retry Order'}
+            </button>
+          </div>
+        )}
         {items.length === 0 ? (
           <section className="rounded-xl border border-slate-200 bg-white p-8 text-center">
             <p className="font-medium text-slate-700">Your cart is empty.</p>
@@ -112,7 +129,7 @@ export default function CartPage() {
               <div className="flex items-center gap-5">
                 <p className="text-lg font-bold text-slate-900">Total: {formatCurrency(total)}</p>
                 <button type="button" disabled={placing} onClick={placeOrder} className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-60">
-                  {placing ? 'Placing order...' : 'Place Order'}
+                  {placing ? 'Placing order...' : error ? 'Retry Order' : 'Place Order'}
                 </button>
               </div>
             </div>

@@ -6,6 +6,7 @@ import MenuPage from './pages/MenuPage';
 import AdminMenuPage from './pages/AdminMenuPage';
 import StaffDashboard from './pages/StaffDashboard'; // Increment 3 (replaces StaffDashboardPage)
 import MyOrders from './pages/MyOrders'; // Increment 3
+import RecordsPage from './pages/RecordsPage'; // Increment 4
 import CartPage from './pages/CartPage';
 import { CartProvider } from './context/CartContext';
 
@@ -58,6 +59,14 @@ export default function App() {
               element={
                 <ProtectedRoute allowedRoles={['staff']}>
                   <StaffDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/records"
+              element={
+                <ProtectedRoute allowedRoles={['staff', 'admin']}>
+                  <RecordsPage />
                 </ProtectedRoute>
               }
             />
