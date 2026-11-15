@@ -250,3 +250,84 @@ npm test
 
 ### Logging In (Increment 1)
 Since Increment 1 does not include user registration/signup, use the seeded demo accounts defined in `server/src/seed.js` (and printed to the console when you run `npm run seed`) to log in as an `admin`, `staff`, or `student` user.
+
+
+
+
+
+## Increment 4: Order Records, Error Handling & Hardening
+
+Increment 4 introduces a Staff/Admin Order Records page, allowing authorized users to view historical orders, filter records by status and date, and navigate through paginated results. This increment also improves error handling, retry functionality, and application reliability.
+
+### Staff Order Records
+
+A new Records page (`/records`) is available to staff and admin users.
+
+**Records API**
+
+`GET /api/staff/records`
+
+- Accessible only to authenticated staff and admin users.
+- Students are denied access with a 403 Forbidden response.
+- Supports filtering orders by status.
+- Supports start-date and end-date filtering.
+- Returns order details, including order number, student information, ordered items, quantities, total amount, status, and timestamps.
+- Displays the newest orders first.
+- Supports pagination using `page` and `limit` query parameters.
+- Returns the total number of matching orders and total revenue across all matching filtered orders.
+
+**Frontend — Records Page (`/records`)**
+
+- Displays historical order records in a responsive table and mobile-friendly layout.
+- Provides filters for order status, start date, and end date.
+- Includes options to clear filters and refresh records.
+- Supports Previous and Next pagination.
+- Displays the total matching order count and aggregated revenue.
+- Provides loading, empty, error, and retry states.
+
+### Error Handling and Retry Improvements
+
+- Improved error messages and retry functionality across the application.
+- Added clearer feedback for failed requests.
+- Ensured retry buttons reset their loading state correctly.
+- Preserved cart contents when order placement fails.
+- Retained the same idempotency key when retrying an order request to prevent duplicate order creation.
+- Cart contents are cleared only after successful order placement.
+
+### Validation and Access Control
+
+- Added Zod-based validation for order record filters.
+- Validates date inputs, including invalid calendar dates and leap years.
+- Date-only filters use the application’s IST timezone (`+05:30`).
+- Maintains role-based frontend route protection and backend authorization.
+- Staff and admin users can access Records, while students cannot.
+
+### Testing
+
+Increment 4 includes automated tests for record filter validation and the Records API.
+
+The tests cover:
+
+- Valid and invalid date filters.
+- IST date boundaries.
+- Status and date filtering.
+- Pagination.
+- Revenue aggregation.
+- Role-based access control.
+
+Run backend tests from the server directory:
+
+```bash
+cd server
+npm test
+```
+
+Build the frontend from the client directory:
+
+```bash
+cd client
+npm run build
+```
+
+**Verification:** Backend test suite — 48 tests passed. Frontend production build completed successfully during Increment 4 verification.
+
