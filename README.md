@@ -148,9 +148,14 @@ MongoDB Atlas (or another MongoDB deployment configured as a replica set) is
 required for the transaction used by order placement.
 ## Increment 3: Order Status and Staff Dashboard
 
-Students can follow their orders through each stage of preparation, and staff can
-move orders through the status flow from a dashboard. Status values were reserved
-in Increment 2; Increment 3 puts them to use. No new database models were needed.
+Increment 3 introduces student order tracking and staff order management.
+Students can view their placed orders, monitor the current preparation status,
+and track progress through a five-stage order lifecycle. Staff members can view
+incoming orders, filter orders by status, and update their progress through the
+Staff Dashboard.
+
+The implementation uses the existing Order and OrderItem models from
+Increment 2. No new database models were required.
 
 ### Order status flow
 
@@ -160,6 +165,11 @@ The server (`server/src/utils/orderStatus.js`) allows only one step forward at a
 Skipping a step, moving backward, repeating a status, and changing a `Completed`
 order are all rejected. The client has its own copy of the status list
 (`client/src/utils/orderStatus.js`) for display only; the server enforces the rules.
+The backend also implements a compare-and-set database update. Before changing
+an order status, it checks whether the order still has the previously retrieved
+status. This prevents concurrent staff updates from advancing an order using
+outdated information. If another staff member has already updated the order,
+the API returns `409 Conflict`.
 
 ### Staff Order API
 
