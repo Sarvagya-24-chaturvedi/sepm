@@ -211,6 +211,7 @@ Responses use `{ success, message?, data }`, where each order in `data` contains
 - **Automatic Dashboard Refresh** — refreshes the staff order list every 10 seconds and provides a manual refresh option.
 - **`StatusBadge`** — reusable component for displaying the current order status.
 - **`StaffDashboard.jsx`** replaces the earlier Increment 1 staff dashboard placeholder. `StaffDashboardPage.jsx` remains in the repository but is no longer used by the application router.
+  
 ### Running Increment 3
 
 The setup commands are unchanged. To try the new features, run `npm run seed`, then:
@@ -240,7 +241,7 @@ Run the tests from the server directory:
 ```bash
 cd server
 npm test
-### Known limitations
+```
 
 - `/staff` is open to the staff role only, while the staff API also accepts admins.
 - Updates reach the student by polling, not live push.
