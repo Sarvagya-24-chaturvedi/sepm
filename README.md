@@ -131,7 +131,7 @@ Successful placement returns `{ success, message, data }`, where `data` contains
 The existing setup commands remain unchanged:
 
 ```bash
-cd server
+cd servera
 npm test
 npm run dev
 ```
@@ -140,12 +140,85 @@ In another terminal:
 
 ```bash
 cd client
-npm run build
+npm run builda
 npm run dev
 ```
 
 MongoDB Atlas (or another MongoDB deployment configured as a replica set) is
 required for the transaction used by order placement.
+## Increment 3: Order Status and Staff Dashboard
+
+Students can follow their orders through each stage of preparation, and staff can
+move orders through the status flow from a dashboard. Status values were reserved
+in Increment 2; Increment 3 puts them to use. No new database models were needed.
+
+### Order status flow
+
+`Placed` → `Confirmed` → `Preparing` → `Ready` → `Completed`
+
+The server (`server/src/utils/orderStatus.js`) allows only one step forward at a time.
+Skipping a step, moving backward, repeating a status, and changing a `Completed`
+order are all rejected. The client has its own copy of the status list
+(`client/src/utils/orderStatus.js`) for display only; the server enforces the rules.
+
+### Staff Order API
+
+These routes use the existing cookie JWT and are limited to staff and admin users.
+A student calling them receives `403`.
+
+- `GET /api/staff/orders` — returns active orders (every status except `Completed`),
+  oldest first, up to 100. Each order includes the student's name and its items.
+- `GET /api/staff/orders?status=<value>` — filters by `Placed`, `Confirmed`,
+  `Preparing`, `Ready`, `Completed`, or `active`.
+- `PATCH /api/staff/orders/:orderId/status` — body `{ "status": "Confirmed" }`.
+  Moves the order to its next status. The update is applied only if the order is
+  still in the status the server just read, so two staff members cannot advance
+  the same order twice.
+
+Responses use `{ success, message?, data }`, where each order in `data` contains
+`id`, `orderNumber`, `status`, `nextStatus`, `totalAmount`, `createdAt`,
+`updatedAt`, `student`, and `items`.
+
+| Code | Meaning |
+|---|---|
+| `200` | Status updated |
+| `400` | Status is not one of the five valid values |
+| `401` | Not logged in |
+| `403` | Logged in without the staff or admin role |
+| `404` | Invalid or unknown order ID |
+| `409` | Invalid move (skipped, backward, or already `Completed`), or the order was changed by someone else |
+
+### Frontend
+
+- **My Orders (`/orders`, student)** — lists the student's orders with items, total,
+  a status badge, and a five-step progress bar. It refreshes every 15 seconds and shows
+  a pickup message when an order is `Ready`. A "My Orders" link was added to the
+  student navbar.
+- **Staff Dashboard (`/staff`, staff)** — a table of orders with filter tabs
+  (Active and each status) and a "Mark <next status>" button on every row. It refreshes
+  every 10 seconds and shows success and error messages. It replaces the Increment 1
+  placeholder; `StaffDashboardPage.jsx` is no longer used.
+- **`StatusBadge`** — a small shared component that shows the coloured status label.
+
+### Running Increment 3
+
+The setup commands are unchanged. To try the new features, run `npm run seed`, then:
+
+1. Log in as a student, add items to the cart, and place an order.
+2. Open **My Orders** and check that the order shows `Placed`.
+3. In another browser window, log in as staff, open the dashboard, and move the
+   order through each status.
+4. Check that the student's page updates within about 15 seconds.
+
+Unit tests for the transition rules are in `server/tests/orderStatus.test.js`
+and run with `npm test` in `server/`.
+
+### Known limitations
+
+- `/staff` is open to the staff role only, while the staff API also accepts admins.
+- Updates reach the student by polling, not live push.
+- Order cancellation is out of scope; it needs an SRS change request (Q3).
+- The staff records page with date and status filters is planned for Increment 4.
 
 ### Logging In (Increment 1)
 Since Increment 1 does not include user registration/signup, use the seeded demo accounts defined in `server/src/seed.js` (and printed to the console when you run `npm run seed`) to log in as an `admin`, `staff`, or `student` user.
