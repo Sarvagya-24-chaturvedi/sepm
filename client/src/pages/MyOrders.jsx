@@ -1,19 +1,20 @@
 // UI-04 Order Status (student). Route: /orders  (student only)
 import { useCallback, useEffect, useState } from 'react';
-import api from '../api/axios'; // your existing axios instance (baseURL '/api', withCredentials)
+import api from '../api/axios';
+import Layout from '../components/Layout';
 import StatusBadge from '../components/StatusBadge';
 import { STATUS_FLOW, formatDateTime } from '../utils/orderStatus';
 
 const POLL_MS = 15000;
 
-// Tolerates both camelCase documents and the snake_case shape used by POST /api/orders.
+// GET /api/orders/my returns snake_case fields (order_id, total_amount, created_at, item_name).
 const normalize = (o) => ({
   id: o._id || o.id || o.order_id,
   number: o.orderNumber || o.order_number || o.order_id,
   status: o.status,
   total: o.totalAmount ?? o.total_amount ?? 0,
   createdAt: o.createdAt || o.created_at,
-  items: (o.items || []).map((i) => ({ name: i.itemName || i.name, quantity: i.quantity })),
+  items: (o.items || []).map((i) => ({ name: i.item_name || i.itemName || i.name, quantity: i.quantity })),
 });
 
 function Progress({ status }) {
@@ -55,10 +56,17 @@ export default function MyOrders() {
     return () => clearInterval(timer);
   }, [load]);
 
-  if (loading) return <p className="p-6 text-gray-500">Loading your orders...</p>;
+  if (loading) {
+    return (
+      <Layout>
+        <p className="text-gray-500">Loading your orders...</p>
+      </Layout>
+    );
+  }
 
   return (
-    <div className="mx-auto max-w-3xl p-4 sm:p-6">
+    <Layout>
+    <div className="mx-auto max-w-3xl">
       <h1 className="mb-4 text-2xl font-bold">My Orders</h1>
 
       {error && (
@@ -96,5 +104,6 @@ export default function MyOrders() {
         ))}
       </ul>
     </div>
+    </Layout>
   );
 }
