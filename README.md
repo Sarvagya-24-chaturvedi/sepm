@@ -2,6 +2,10 @@
 
 A responsive web application for a College Canteen Management System built with MongoDB Atlas, Express, React (Vite), Tailwind CSS, and Node.js.
 
+See the [User Guide](docs/USER_GUIDE.md) for workflows by role and the
+[Functional and UI Test Report](docs/TEST_REPORT.md) for the automated coverage
+and latest results.
+
 ---
 
 ## Increment 1 Scope (Login, Roles & Menu)
@@ -131,7 +135,7 @@ Successful placement returns `{ success, message, data }`, where `data` contains
 The existing setup commands remain unchanged:
 
 ```bash
-cd servera
+cd server
 npm test
 npm run dev
 ```
@@ -140,7 +144,7 @@ In another terminal:
 
 ```bash
 cd client
-npm run builda
+npm run build
 npm run dev
 ```
 
@@ -241,6 +245,15 @@ Run the tests from the server directory:
 ```bash
 cd server
 npm test
+```
+
+Client UI tests cover workflows across all four increments. Run all automated
+functional and UI checks from the repository root:
+
+```powershell
+npm --prefix server test
+npm --prefix client test
+npm --prefix client run build
 ```
 
 - `/staff` is open to the staff role only, while the staff API also accepts admins.
