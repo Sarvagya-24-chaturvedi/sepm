@@ -35,16 +35,76 @@ const DEMO_USERS = [
 ];
 
 const MENU_ITEMS = [
-  { name: 'Masala Dosa', category: 'Breakfast', price: 50, isAvailable: true },
-  { name: 'Idli Vada Combo', category: 'Breakfast', price: 40, isAvailable: true },
-  { name: 'Poha', category: 'Breakfast', price: 30, isAvailable: false },
-  { name: 'Veg Biryani', category: 'Meals', price: 90, isAvailable: true },
-  { name: 'Paneer Butter Masala & Naan', category: 'Meals', price: 120, isAvailable: true },
-  { name: 'Rajma Chawal', category: 'Meals', price: 80, isAvailable: true },
-  { name: 'Samosa (2 pcs)', category: 'Snacks', price: 25, isAvailable: true },
-  { name: 'Vada Pav', category: 'Snacks', price: 20, isAvailable: true },
-  { name: 'Filter Coffee', category: 'Beverages', price: 20, isAvailable: true },
-  { name: 'Cold Coffee', category: 'Beverages', price: 45, isAvailable: false },
+  {
+    name: 'Masala Dosa',
+    category: 'Breakfast',
+    price: 50,
+    imageUrl: 'https://images.unsplash.com/photo-1630383249896-424e482df921?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Idli Vada Combo',
+    category: 'Breakfast',
+    price: 40,
+    imageUrl: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Poha',
+    category: 'Breakfast',
+    price: 30,
+    imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80',
+    isAvailable: false,
+  },
+  {
+    name: 'Veg Biryani',
+    category: 'Meals',
+    price: 90,
+    imageUrl: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Paneer Butter Masala & Naan',
+    category: 'Meals',
+    price: 120,
+    imageUrl: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Rajma Chawal',
+    category: 'Meals',
+    price: 80,
+    imageUrl: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Samosa (2 pcs)',
+    category: 'Snacks',
+    price: 25,
+    imageUrl: 'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Vada Pav',
+    category: 'Snacks',
+    price: 20,
+    imageUrl: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Filter Coffee',
+    category: 'Beverages',
+    price: 20,
+    imageUrl: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80',
+    isAvailable: true,
+  },
+  {
+    name: 'Cold Coffee',
+    category: 'Beverages',
+    price: 45,
+    imageUrl: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80',
+    isAvailable: false,
+  },
 ];
 
 async function seed() {

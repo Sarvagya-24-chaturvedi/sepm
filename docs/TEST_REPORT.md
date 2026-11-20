@@ -1,7 +1,7 @@
 # Functional and UI Test Report
 
 **Project:** College Canteen Management System  
-**Test date:** 19 November 2026  
+**Test date:** 21 November 2026
 **Scope:** Increments 1–4  
 **Result:** PASS
 
@@ -10,10 +10,13 @@
 | Suite | Runner | Result |
 |---|---|---|
 | Server functional/API and existing regression tests | Jest | 57 passed |
-| Client UI interaction tests | Vitest + React Testing Library + jsdom | 14 passed |
+| Client UI interaction tests | Vitest + React Testing Library + jsdom | 15 passed |
 | Client production build | Vite | Passed; 115 modules transformed |
 
-**Automated tests:** 71 passed, 0 failed.
+**Automated tests:** 72 passed, 0 failed.
+
+**Responsive browser spot-check:** Menu at 375px and staff/admin lists at 320px
+showed no page-level horizontal overflow; menu photos loaded successfully.
 
 The API tests exercise Express routes with mocked model/database calls; they do
 not claim to test a live MongoDB deployment or transaction implementation. The
@@ -31,8 +34,9 @@ still requires the configured MongoDB database for manual end-to-end use.
 | I1-API-03 | API | Admin menu creation and student write attempt | Admin creates a valid dish; student receives 403 without a database write. |
 | I1-UI-01 | UI | Submit empty and malformed login fields | Inline validation appears and login is not called. |
 | I1-UI-02 | UI | Successful student, staff, and admin login | Each role reaches its expected landing page. |
-| I1-UI-03 | UI | Select a menu category and inspect unavailable item | Category request/filter is applied; unavailable item has no add-to-cart action. |
+| I1-UI-03 | UI | Select a menu category, inspect unavailable item and photo | Category request/filter is applied; unavailable item has no add-to-cart action; menu image renders with descriptive alt text. |
 | I1-UI-04 | UI | Recover from menu request error | Error is visible; Retry reloads the menu. |
+| I1-UI-05 | UI | Add menu item with HTTPS image URL | Admin form validates and sends the image URL with the menu item. |
 
 ### Increment 2 — Cart edits, totals, and confirmation
 
@@ -80,6 +84,6 @@ npm --prefix client test
 npm --prefix client run build
 ```
 
-The client run reported 4 test files / 14 tests passed. The server run reported
+The client run reported 4 test files / 15 tests passed. The server run reported
 7 test files / 57 tests passed. Automated suite commands do not connect to
 MongoDB.

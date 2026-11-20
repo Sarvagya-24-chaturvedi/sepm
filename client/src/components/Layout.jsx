@@ -35,12 +35,12 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-6">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
+        <div className="mx-auto flex min-h-16 max-w-5xl items-center justify-between gap-2 px-3 py-2 sm:gap-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-6">
             <Link
               to={user ? getHomePathForRole(user.role) : '/login'}
-              className="text-lg font-bold text-slate-900 tracking-tight whitespace-nowrap"
+              className="truncate whitespace-nowrap text-base font-bold tracking-tight text-slate-900 sm:text-lg"
             >
               College Canteen
             </Link>
@@ -64,19 +64,19 @@ export default function Layout({ children }) {
           </div>
 
           {user && (
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <div className="text-right leading-tight">
-                <p className="text-sm font-medium text-slate-900 truncate max-w-[140px] sm:max-w-none">
+                <p className="max-w-18 truncate text-xs font-medium text-slate-900 min-[380px]:max-w-25 sm:max-w-none sm:text-sm">
                   {user.name}
                 </p>
-                <span className="inline-block text-xs font-semibold uppercase tracking-wide text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-800 min-[380px]:inline-block">
                   {user.role}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 sm:px-3 sm:text-sm"
               >
                 Logout
               </button>
@@ -87,7 +87,7 @@ export default function Layout({ children }) {
         {links.length > 0 && (
           <nav
             aria-label="Mobile navigation"
-            className="sm:hidden border-t border-slate-100 px-4 py-2 flex items-center gap-2 overflow-x-auto"
+            className="flex items-center gap-2 overflow-x-auto border-t border-slate-100 px-3 py-2 sm:hidden"
           >
             {links.map((link) => (
               <NavLink
@@ -107,7 +107,7 @@ export default function Layout({ children }) {
         )}
       </header>
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-3 py-4 sm:px-6 sm:py-6">
         {children}
       </main>
     </div>

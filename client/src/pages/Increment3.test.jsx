@@ -67,15 +67,15 @@ describe('Increment 3: order status and staff dashboard UI', () => {
     const user = userEvent.setup();
     renderPage(StaffDashboard);
 
-    expect(await screen.findByText('Asha Student')).toBeInTheDocument();
-    expect(screen.getByText('2 x Samosa')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Mark Confirmed' }));
+    expect(await screen.findAllByText('Asha Student')).toHaveLength(2);
+    expect(screen.getAllByText('2 x Samosa')).toHaveLength(2);
+    await user.click(screen.getAllByRole('button', { name: 'Mark Confirmed' })[0]);
 
     expect(await screen.findByRole('status')).toHaveTextContent('ORD-2001 moved to Confirmed.');
     await waitFor(() => expect(api.patch).toHaveBeenCalledWith(
       '/staff/orders/order-1/status',
       { status: 'Confirmed' }
     ));
-    expect(await screen.findByRole('button', { name: 'Mark Preparing' })).toBeInTheDocument();
+    expect(await screen.findAllByRole('button', { name: 'Mark Preparing' })).toHaveLength(2);
   });
 });

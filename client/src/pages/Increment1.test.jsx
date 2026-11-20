@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import LoginPage from './LoginPage';
 import MenuPage from './MenuPage';
+import AdminMenuPage from './AdminMenuPage';
 
 vi.mock('../api/axios', () => ({
   default: { get: vi.fn(), post: vi.fn(), patch: vi.fn() },
@@ -110,6 +111,10 @@ describe('Increment 1: login and menu UI', () => {
     renderMenu();
 
     expect(await screen.findByText('Samosa')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Samosa' })).toHaveAttribute(
+      'src',
+      'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=800&q=80'
+    );
     expect(screen.getByText('Unavailable')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Add to cart' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Poha/ })).not.toBeInTheDocument();
@@ -131,5 +136,43 @@ describe('Increment 1: login and menu UI', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Retry' }));
     expect(await screen.findByText('No menu items found.')).toBeInTheDocument();
     expect(api.get).toHaveBeenCalledTimes(2);
+  });
+
+  it('lets admins save an HTTPS image URL for a menu item', async () => {
+    api.get.mockResolvedValue({ data: { items: [] } });
+    api.post.mockResolvedValue({
+      data: {
+        item: {
+          _id: 'item-new',
+          name: 'Masala Dosa',
+          category: 'Breakfast',
+          imageUrl: 'https://images.unsplash.com/photo-1630383249896-424e482df921',
+          price: 50,
+          isAvailable: true,
+        },
+      },
+    });
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <AdminMenuPage />
+      </MemoryRouter>
+    );
+
+    await user.click(await screen.findByRole('button', { name: '+ Add Item' }));
+    await user.type(screen.getByLabelText('Item Name'), 'Masala Dosa');
+    await user.type(screen.getByLabelText('Category'), 'Breakfast');
+    await user.type(screen.getByLabelText('Image URL (optional)'), 'https://images.unsplash.com/photo-1630383249896-424e482df921');
+    await user.type(screen.getByLabelText('Price (₹)'), '50');
+    await user.click(screen.getByRole('button', { name: 'Add Item' }));
+
+    await waitFor(() => expect(api.post).toHaveBeenCalledWith('/menu', {
+      name: 'Masala Dosa',
+      category: 'Breakfast',
+      imageUrl: 'https://images.unsplash.com/photo-1630383249896-424e482df921',
+      price: 50,
+      isAvailable: true,
+    }));
+    expect(await screen.findByRole('status')).toHaveTextContent('Added "Masala Dosa".');
   });
 });
