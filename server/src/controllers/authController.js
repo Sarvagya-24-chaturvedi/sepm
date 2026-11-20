@@ -7,10 +7,11 @@ const COOKIE_NAME = 'token';
 const TOKEN_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 function getCookieOptions() {
+  const isProd = process.env.NODE_ENV === 'production';
   return {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    sameSite: isProd ? process.env.COOKIE_SAMESITE || 'none' : 'lax',
+    secure: isProd,
     maxAge: TOKEN_MAX_AGE_MS,
   };
 }
