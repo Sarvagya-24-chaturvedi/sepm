@@ -80,13 +80,25 @@ describe('Increment 1 API: authentication and menu', () => {
       isAvailable: true,
     };
     MenuItem.create.mockResolvedValue(created);
-    const body = { name: 'Idli', category: 'Breakfast', price: 40 };
+    const body = {
+      name: 'Idli',
+      category: 'Breakfast',
+      imageUrl: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0',
+      price: 40,
+    };
 
     const forbidden = await request(app)
       .post('/api/menu')
       .set('Cookie', `token=${studentToken}`)
       .send(body);
     expect(forbidden.status).toBe(403);
+    expect(MenuItem.create).not.toHaveBeenCalled();
+
+    const invalidImageUrl = await request(app)
+      .post('/api/menu')
+      .set('Cookie', `token=${adminToken}`)
+      .send({ ...body, imageUrl: 'http://example.com/dish.jpg' });
+    expect(invalidImageUrl.status).toBe(400);
     expect(MenuItem.create).not.toHaveBeenCalled();
 
     const response = await request(app)

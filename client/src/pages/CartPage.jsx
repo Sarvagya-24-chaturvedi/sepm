@@ -126,9 +126,9 @@ export default function CartPage() {
             </div>
             <div className="mt-6 flex flex-col items-start justify-between gap-4 border-t border-slate-200 pt-5 sm:flex-row sm:items-center">
               <Link to="/menu" className="text-sm font-semibold text-amber-700 hover:text-amber-800">Continue shopping</Link>
-              <div className="flex items-center gap-5">
+              <div className="flex w-full flex-wrap items-center justify-between gap-3 sm:w-auto sm:gap-5">
                 <p className="text-lg font-bold text-slate-900">Total: {formatCurrency(total)}</p>
-                <button type="button" disabled={placing} onClick={placeOrder} className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-60">
+                <button type="button" disabled={placing} onClick={placeOrder} className="w-full rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
                   {placing ? 'Placing order...' : error ? 'Retry Order' : 'Place Order'}
                 </button>
               </div>

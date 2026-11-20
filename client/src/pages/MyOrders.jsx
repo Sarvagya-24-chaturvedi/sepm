@@ -20,7 +20,7 @@ const normalize = (o) => ({
 function Progress({ status }) {
   const current = STATUS_FLOW.indexOf(status);
   return (
-    <ol className="mt-3 flex items-center gap-1 text-[11px] sm:text-xs">
+    <ol className="flex min-w-[34rem] items-center gap-1 text-[11px] sm:text-xs">
       {STATUS_FLOW.map((step, i) => (
         <li key={step} className="flex flex-1 flex-col items-center">
           <div className={`h-1.5 w-full rounded ${i <= current ? 'bg-emerald-500' : 'bg-gray-200'}`} />
@@ -96,7 +96,9 @@ export default function MyOrders() {
             )}
             <p className="mt-1 text-sm font-medium">Total: ₹{Number(o.total).toFixed(2)}</p>
 
-            <Progress status={o.status} />
+            <div className="mt-3 overflow-x-auto">
+              <Progress status={o.status} />
+            </div>
             {o.status === 'Ready' && (
               <p className="mt-3 rounded bg-green-50 p-2 text-sm text-green-800">Your order is ready. Please collect it at the counter.</p>
             )}

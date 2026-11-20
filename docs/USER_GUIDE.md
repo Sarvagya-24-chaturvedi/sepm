@@ -27,7 +27,8 @@ email and password and try again.
 1. Open **Menu**.
 2. Choose **All** or a category such as Breakfast, Meals, Snacks, or Beverages.
 3. Available dishes have an **Available** label and an **Add to cart** button.
-   Unavailable dishes are labelled and cannot be added.
+   Unavailable dishes are labelled and cannot be added. Dish cards include
+   externally hosted photos when available.
 
 ### Edit the cart and place an order (Increment 2)
 
@@ -79,8 +80,12 @@ dashboard or the records page.
 ## Admin: manage the menu (Increment 1)
 
 Admins can open **Admin Menu** to add and edit dishes and toggle availability.
-Menu items are disabled/enabled rather than deleted, so historical order items
-remain intact.
+New items can include an optional HTTPS image URL; the seeded dishes already
+have photo URLs. Menu items are disabled/enabled rather than deleted, so
+historical order items remain intact.
+
+The interface adapts its navigation, cards, and order lists for phone and
+desktop screen widths.
 
 ## Running the automated test suites
 

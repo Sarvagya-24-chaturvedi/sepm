@@ -39,7 +39,9 @@ and latest results.
   - **Login Page (`/login`)**: email/password form with client-side validation, inline errors, loading state, and server error display.
   - **Shared Layout & Navbar**: displays user name, role badge, logout button, and role-specific navigation links.
   - **Menu Page (`/menu`)**: responsive menu cards showing name, category, price in ₹, availability badge, category filter pills, greyed-out unavailable items, plus loading, empty, and error-with-retry states.
+    Seeded dishes include externally hosted photos; existing menu entries without an image use the built-in dish image mapping where available.
   - **Admin Menu Page (`/admin/menu`)**: table of all items with add/edit modal (matching server validation), enable/disable toggle, inline success/error feedback, and live list updates without page reload.
+    The form accepts optional HTTPS image URLs. Navigation, tables, and dialogs adapt to small screens.
   - **Staff Dashboard (`/staff`)**: placeholder page for Increment 1 with a direct link to the menu.
   - **Reusable `ErrorRetry` component** for error and retry states.
 
