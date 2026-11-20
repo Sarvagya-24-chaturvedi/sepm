@@ -15,26 +15,33 @@ const app = express();
 // Trust reverse proxy (Render, Railway, Vercel, Nginx) for secure cookies & rate limiting
 app.set('trust proxy', 1);
 
-const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
-  .split(',')
+const allowedOrigins = [
+  ...(process.env.CLIENT_URL || 'http://localhost:5173').split(','),
+  process.env.RENDER_EXTERNAL_URL || '',
+]
   .map((origin) => origin.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
 app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin) return callback(null, true);
-      const normalized = origin.replace(/\/+$/, '');
-      if (allowedOrigins.includes(normalized)) {
-        return callback(null, true);
-      }
-      const err = new Error('Not allowed by CORS');
-      err.statusCode = 403;
-      return callback(err);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+  '/api',
+  cors((req, callback) => {
+    const origin = req.header('Origin');
+    if (!origin) {
+      return callback(null, { origin: true, credentials: true });
+    }
+    const normalized = origin.replace(/\/+$/, '');
+    const sameOrigin = `${req.protocol}://${req.get('host')}`;
+    if (normalized === sameOrigin || allowedOrigins.includes(normalized)) {
+      return callback(null, {
+        origin: true,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+      });
+    }
+    const err = new Error('Not allowed by CORS');
+    err.statusCode = 403;
+    return callback(err);
   })
 );
 app.use(express.json());
